@@ -1,0 +1,13 @@
+# Number of concurrent replays that can happen concurrently, more requests than this get discarded.
+DIFFY_THREAD_POOL=10
+
+# Between 0 and 1
+DIFFY_LOW_RATE=0.01
+DIFFY_MEDIUM_RATE=0.2
+DIFFY_HIGH_RATE=0.5
+
+# Empty means diffy replayer is disabled
+DIFFY_URL=
+
+# File that contains the regular expressions used to parse the api URIS.
+PATTERN_FILE=diffyreplayer.patterns

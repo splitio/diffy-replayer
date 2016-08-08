@@ -5,8 +5,31 @@
 
 # Package Files #
 *.jar
+!common/libs/*.jar
+!selenium/selenium-server-standalone*.jar
+!allure-report/aspectjweaver.jar 
+!diffy/diffy-server.jar
 *.war
 *.ear
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+*.log
+meetup/allure-report
+meetup/target
+.sonar/
+sonar-scanner/
+sonar-project.properties
+// IDEA
+.idea/
+.project
+.classpath
+*.swp
+*.iws
+*.iml
+*.ipk
+*.ipa
+*.ipr
+.DS_Store
+.gradle/
+build/

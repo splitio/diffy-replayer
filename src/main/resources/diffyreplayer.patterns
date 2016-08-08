@@ -1,0 +1,10 @@
+########################################################################################
+# Properties file for definning the regular expressions for parsing the endpoint URIS, #
+# so you can replace ids with constants.                                               #
+########################################################################################
+
+# This one is for replacing Universal Unique Identifiers (https://en.wikipedia.org/wiki/Universally_unique_identifier)
+[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12},UUID
+
+# Example, this will replace "api/segmentChanges/oneSegmentName" with "api/segmentChanges/SEGMENT_NAME"
+api/segmentChanges/[a-zA-Z][a-zA-Z0-9_-]*,api/segmentChanges/SEGMENT_NAME
