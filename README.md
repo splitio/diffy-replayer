@@ -17,5 +17,7 @@ Set up is pretty straightforward:
 
 That is all, once deployed queries to the specified endpoint will be sent to Diffy Server!
 
+Take a look at the [Wiki](https://github.com/splitio/diffy-replayer/wiki) for more information about configuration.
+
 
 
