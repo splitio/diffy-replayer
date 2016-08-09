@@ -17,3 +17,5 @@ Set up is pretty straightforward:
 
 That is all, once deployed queries to the specified endpoint will be sent to Diffy Server!
 
+
+
