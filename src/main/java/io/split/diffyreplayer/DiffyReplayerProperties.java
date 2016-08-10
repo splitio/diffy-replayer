@@ -48,7 +48,7 @@ public enum DiffyReplayerProperties {
 
     private final Properties properties = new Properties();
     private String environment;
-    private final Map<Pattern, String> patterns = Maps.newHashMap();
+    private final Map<Pattern, String> patterns = Maps.newLinkedHashMap();
 
     /**
      * Default Constructor that loads the properties file.

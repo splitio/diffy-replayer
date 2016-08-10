@@ -55,7 +55,7 @@ public class DiffyIdParserTest {
         Assert.assertEquals(expect,
                 parser.convert("internal/api/segments/organization/UUID/environment/UUID/segmentName/thesegment"));
         Assert.assertEquals(expect,
-                parser.convert("/internal/api/segments/organization/UUID/environment/UUID/segmentName/hahaha/"));
+                parser.convert("internal/api/segments/organization/UUID/environment/UUID/segmentName/PHP_5_3_addAndRemoveIdToSegmentAndCheckTestIsUpdated"));
     }
 
     @Test
