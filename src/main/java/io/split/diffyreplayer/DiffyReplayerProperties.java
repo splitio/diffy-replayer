@@ -21,8 +21,9 @@ import java.util.regex.Pattern;
  * The file should be in the resources file.
  * If no environment variable is defined, by default it will load the properties diffyreplayer.properties.dev
  */
-public enum DiffyReplayerProperties {
-    INSTANCE;
+public class DiffyReplayerProperties {
+
+    public static final DiffyReplayerProperties INSTANCE = new DiffyReplayerProperties();
 
     private final Logger LOG = LoggerFactory.getLogger(DiffyReplayerProperties.class);
 
@@ -53,7 +54,7 @@ public enum DiffyReplayerProperties {
     /**
      * Default Constructor that loads the properties file.
      */
-    DiffyReplayerProperties() {
+    private DiffyReplayerProperties() {
         try {
             environment = Optional.ofNullable(System.getenv(ENVIRONMENT)).orElse(LOCAL_ENVIRONMENT);
             String envFile = String.format(DIFFY_FILE, environment);
@@ -142,11 +143,11 @@ public enum DiffyReplayerProperties {
                     //Skip comments '#'
                     if (!line.startsWith("#") && !line.isEmpty()) {
                         String[] splitted = line.split(",");
-                        if (splitted.length != 2) {
+                        if (splitted.length > 2 || (splitted.length == 1 && !line.endsWith(","))) {
                             throw new IllegalArgumentException(String.format("Line %s is not well formatted", line));
                         }
                         Pattern compile = Pattern.compile(splitted[0]);
-                        patterns.put(compile, splitted[1]);
+                        patterns.put(compile, !line.endsWith(",") ? splitted[1] : "");
                     }
                 }
             } else {

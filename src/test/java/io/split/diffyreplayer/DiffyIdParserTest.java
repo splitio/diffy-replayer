@@ -5,13 +5,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class DiffyIdParserTest {
 
     @Test
     public void testNoIdWorks() {
-        Map<Pattern, String> patterns = Maps.newHashMap();
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
         patterns.put(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"), "ID");
         DiffyIdParser parser = new DiffyIdParser(patterns);
         Assert.assertEquals("should/be/same", parser.convert("should/be/same"));
@@ -22,7 +23,7 @@ public class DiffyIdParserTest {
 
     @Test
     public void testIdWorks() {
-        Map<Pattern, String> patterns = Maps.newHashMap();
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
         patterns.put(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"), "ID");
         DiffyIdParser parser = new DiffyIdParser(patterns);
         Assert.assertEquals("org/ID/env/ID/tests/ID",
@@ -35,7 +36,7 @@ public class DiffyIdParserTest {
 
     @Test
     public void testFixedWorks() {
-        Map<Pattern, String> patterns = Maps.newHashMap();
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
         patterns.put(Pattern.compile("api/segmentChanges/[a-zA-Z][a-zA-Z0-9_-]*"), "api/segmentChanges/SEGMENT_NAME");
         DiffyIdParser parser = new DiffyIdParser(patterns);
         Assert.assertEquals("api/segmentChanges/SEGMENT_NAME",
@@ -47,7 +48,7 @@ public class DiffyIdParserTest {
     @Test
     public void testWorksOne() {
         String expect = "internal/api/segments/organization/UUID/environment/UUID/segmentName/SEGMENT_NAME";
-        Map<Pattern, String> patterns = Maps.newHashMap();
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
         patterns.put(
                 Pattern.compile("internal/api/segments/organization/UUID/environment/UUID/segmentName/[a-zA-Z][a-zA-Z0-9_-]*"),
                 expect);
@@ -61,7 +62,7 @@ public class DiffyIdParserTest {
     @Test
     public void testWorksTwo() {
         String expect = "objectType/OBJECT_TYPE/objectId/UUID";
-        Map<Pattern, String> patterns = Maps.newHashMap();
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
         patterns.put(
                 Pattern.compile("objectType/[a-zA-Z][a-zA-Z0-9_-]*/objectId/UUID"),
                 expect);
@@ -75,7 +76,7 @@ public class DiffyIdParserTest {
     @Test
     public void testWorksThree() {
         String expect = "trafficType/{orgId}/TRAFFICE_NAME";
-        Map<Pattern, String> patterns = Maps.newHashMap();
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
         patterns.put(
                 Pattern.compile("trafficType/UUID/[a-zA-Z][a-zA-Z0-9_-]*"),
                 expect);
@@ -89,7 +90,7 @@ public class DiffyIdParserTest {
     @Test
     public void testWorksFour() {
         String expect = "internal/api/syntax/language/LANGUAGE/UUID";
-        Map<Pattern, String> patterns = Maps.newHashMap();
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
         patterns.put(
                 Pattern.compile("internal/api/syntax/language/[a-zA-Z][a-zA-Z0-9_-]*/UUID"),
                 expect);
@@ -103,7 +104,7 @@ public class DiffyIdParserTest {
     @Test
     public void testWorksEmail() {
         String expect = "internal/api/invites/email/EMAIL/organization/UUID";
-        Map<Pattern, String> patterns = Maps.newHashMap();
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
         patterns.put(
                 Pattern.compile("internal/api/invites/email/[A-Za-z0-9+_.-]+@(.+)/organization/UUID"),
                 expect);
@@ -112,5 +113,42 @@ public class DiffyIdParserTest {
                 parser.convert("internal/api/invites/email/fernando@split.io/organization/UUID"));
         Assert.assertEquals(expect,
                 parser.convert("internal/api/invites/email/fernando.a.martin+123@gmail.com/organization/UUID"));
+    }
+
+    @Test
+    public void testRemoveStartingString() {
+
+        String expect = "invites/email/theRest";
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
+        patterns.put(
+                Pattern.compile("^internal\\/api/"),
+                "");
+        DiffyIdParser parser = new DiffyIdParser(patterns);
+        Assert.assertEquals(expect,
+                parser.convert("internal/api/invites/email/theRest"));
+        Assert.assertEquals(expect,
+                parser.convert("/internal/api/invites/email/theRest"));
+    }
+
+    @Test
+    public void testMultiple() {
+
+        Map<Pattern, String> patterns = Maps.newLinkedHashMap();
+        patterns.put(
+                Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"),
+                "UUID");
+        patterns.put(
+                Pattern.compile("^internal\\/api/"),
+                "");
+        patterns.put(
+                Pattern.compile("segments/organization/UUID/environment/UUID/segmentName/[a-zA-Z][a-zA-Z0-9_-]*"),
+                "segments/organization/UUID/environment/UUID/segmentName/SEGMENT_NAME");
+        DiffyIdParser parser = new DiffyIdParser(patterns);
+        String expect = "segments/organization/UUID/environment/UUID/segmentName/SEGMENT_NAME";
+        Assert.assertEquals(expect,
+                parser.convert("/internal/api/segments/organization/" + UUID.randomUUID().toString() +  "/environment/" + UUID.randomUUID().toString() + "/segmentName/theName"));
+
+
+
     }
 }
