@@ -1,6 +1,9 @@
 ########################################################################################
 # Properties file for definning the regular expressions for parsing the endpoint URIS, #
 # so you can replace ids with constants.                                               #
+#                                                                                      #
+# The match and replace are executed in the order of this list, first item first, etc. #
+#                                                                                      #
 ########################################################################################
 
 # This one is for replacing Universal Unique Identifiers (https://en.wikipedia.org/wiki/Universally_unique_identifier)
