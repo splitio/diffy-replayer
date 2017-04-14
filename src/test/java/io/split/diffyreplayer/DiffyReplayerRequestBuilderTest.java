@@ -44,7 +44,7 @@ public class DiffyReplayerRequestBuilderTest {
     }
 
     @Test
-    public void headersAreCopiedAndRequestIsPonintedToServer() {
+    public void headersAreCopiedAndRequestIsPointedToServer() {
         DiffyReplayerRequestBuilder test = new DiffyReplayerRequestBuilder("https://diffy-server.io");
         HttpRequestBase requestBase = test.build(requestContext);
         Assert.assertEquals("https://diffy-server.io/api/qa/testDiffy", requestBase.getURI().toString());

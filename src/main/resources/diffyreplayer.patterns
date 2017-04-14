@@ -1,5 +1,5 @@
 ########################################################################################
-# Properties file for definning the regular expressions for parsing the endpoint URIS, #
+# Properties file for defining the regular expressions for parsing the endpoint URIS,  #
 # so you can replace ids with constants.                                               #
 #                                                                                      #
 # The match and replace are executed in the order of this list, first item first, etc. #

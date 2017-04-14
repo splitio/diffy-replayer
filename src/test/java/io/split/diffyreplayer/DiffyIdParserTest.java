@@ -37,10 +37,12 @@ public class DiffyIdParserTest {
     @Test
     public void testFixedWorks() {
         Map<Pattern, String> patterns = Maps.newLinkedHashMap();
-        patterns.put(Pattern.compile("api/segmentChanges/[a-zA-Z][a-zA-Z0-9_-]*"), "api/segmentChanges/SEGMENT_NAME");
+        patterns.put(Pattern.compile("api/segmentChanges/[a-zA-Z][@\\.a-zA-Z0-9_-]*"), "api/segmentChanges/SEGMENT_NAME");
         DiffyIdParser parser = new DiffyIdParser(patterns);
         Assert.assertEquals("api/segmentChanges/SEGMENT_NAME",
-                parser.convert("api/segmentChanges/Demo"));
+                parser.convert("api/segmentChanges/Demo.343"));
+        Assert.assertEquals("api/segmentChanges/SEGMENT_NAME",
+                parser.convert("api/segmentChanges/Demo@test.com"));
         Assert.assertEquals("api/segmentChanges/SEGMENT_NAME",
                 parser.convert("/api/segmentChanges/Demo/"));
     }
