@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 @NameBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.TYPE})
 public @interface DiffyReplay {
     // Header used so we do not replay a query that is already a replay query.
     String HEADER = "replayer";

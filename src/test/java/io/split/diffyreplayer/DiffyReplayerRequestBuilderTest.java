@@ -49,7 +49,7 @@ public class DiffyReplayerRequestBuilderTest {
         HttpRequestBase requestBase = test.build(requestContext);
         Assert.assertEquals("https://diffy-server.io/api/qa/testDiffy", requestBase.getURI().toString());
         Assert.assertEquals(4, requestBase.getAllHeaders().length);
-        Assert.assertEquals("api/qa/testDiffy", requestBase.getFirstHeader("Canonical-Resource").getValue());
+        Assert.assertEquals("qa/testDiffy", requestBase.getFirstHeader("Canonical-Resource").getValue());
         Assert.assertEquals("true", requestBase.getFirstHeader("replayer").getValue());
         Assert.assertEquals("firstValue", requestBase.getFirstHeader("firstKey").getValue());
         Assert.assertEquals("secondValue", requestBase.getFirstHeader("secondKey").getValue());

@@ -10,7 +10,6 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
-import java.lang.reflect.Method;
 
 /**
  * This is where it starts.
@@ -76,22 +75,8 @@ public class DiffyReplayerFilter implements ContainerRequestFilter {
                 try {
                     Class<?> diffyClass = resourceInfo.getResourceClass();
                     DiffyReplay diffyReplayClass = diffyClass.getAnnotation(DiffyReplay.class);
-                    Method diffyMethod = resourceInfo.getResourceMethod();
-                    DiffyReplay diffyReplayMethod = diffyMethod.getAnnotation(DiffyReplay.class);
-
-                    //Method takes priority over class.
-                    if (diffyReplayMethod != null) {
-                        diffyReplayer.replay(original, diffyReplayMethod.condition().newInstance());
-                    } else {
-                        if (diffyReplayClass != null) {
-                            diffyReplayer.replay(original, diffyReplayClass.condition().newInstance());
-                        } else {
-                            //Since we use NameBinding, it should never get to this point.
-                            LOG.warn(String.format("Neither class %s nor method %s was annotated with " +
-                                    "@DiffyReplay, this should never happen",
-                                    diffyClass.getCanonicalName(),
-                                    diffyMethod.getName()));
-                        }
+                    if (diffyReplayClass != null) {
+                        diffyReplayer.replay(original, diffyReplayClass.condition().newInstance());
                     }
                 } catch (InstantiationException | IllegalAccessException e) {
                     LOG.warn("Failed to instantiate the condition", e);

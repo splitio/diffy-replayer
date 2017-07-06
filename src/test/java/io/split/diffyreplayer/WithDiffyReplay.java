@@ -9,7 +9,6 @@ public class WithDiffyReplay {
 
     }
 
-    @DiffyReplay
     public void withAnnotation() {
     }
 }

@@ -77,17 +77,5 @@ public class DiffyReplayerFilterTest {
                 .filter(requestContext);
         Mockito.verify(diffyReplayer, Mockito.only()).replay(Mockito.anyObject(), Mockito.isA(DiffyAnnotationClass.class));
     }
-
-    @Test
-    public void methodGetsReplayedWithMethodAnnotation() throws IOException {
-        WithoutDiffReplay withoutDiffReplay = new WithoutDiffReplay();
-        Mockito.when(resourceInfo.getResourceClass())
-                .then(invocationOnMock -> withoutDiffReplay.getClass());
-        Mockito.when(resourceInfo.getResourceMethod())
-                .then(invocationOnMock -> withoutDiffReplay.getClass().getMethod("withAnnotation"));
-
-        diffyReplayerFilter
-                .filter(requestContext);
-        Mockito.verify(diffyReplayer, Mockito.only()).replay(Mockito.anyObject(), Mockito.isA(DiffyAnnotationMethod.class));
-    }
+    
 }
