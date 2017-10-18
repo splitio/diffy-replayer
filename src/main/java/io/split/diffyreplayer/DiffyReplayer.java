@@ -3,6 +3,7 @@ package io.split.diffyreplayer;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import io.split.diffyreplayer.condition.DiffyReplayerCondition;
+import io.split.diffyreplayer.util.ContainerRequestUtil;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -53,7 +54,8 @@ public class DiffyReplayer implements AutoCloseable {
 
         executor.submit(() -> {
             if (condition.replay() && !Strings.isNullOrEmpty(diffyUrl)) {
-                LOG.info(String.format("Replaying request %s to url %s", original.getUriInfo().getRequestUri().getRawPath(), diffyUrl));
+                String pathWithQueryParams = ContainerRequestUtil.getPathWithQueryParams(original);
+                LOG.info(String.format("Replaying request %s to url %s", pathWithQueryParams, diffyUrl));
                 DiffyReplayerRequestBuilder builder = new DiffyReplayerRequestBuilder(diffyUrl);
                 HttpRequestBase request = builder.build(original);
                 try (CloseableHttpClient client = HttpClientBuilder.create().build()) {

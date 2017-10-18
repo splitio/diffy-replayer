@@ -2,6 +2,7 @@ package io.split.diffyreplayer;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import io.split.diffyreplayer.util.ContainerRequestUtil;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 
@@ -42,12 +43,10 @@ public class DiffyReplayerRequestBuilder {
     public HttpRequestBase build(ContainerRequestContext original) {
         Preconditions.checkNotNull(original);
 
-        String path = path(original);
-        String query = query(original);
-        String pathWithQueryParams = Strings.isNullOrEmpty(query) ? path : path + "?" + query;
+        String pathWithQueryParams = ContainerRequestUtil.getPathWithQueryParams(original);
         if (!"GET".equals(original.getMethod())) {
             throw new IllegalArgumentException(String.format("Only GETS are allowed, method %s is is %s",
-                    path, original.getMethod()));
+                    pathWithQueryParams, original.getMethod()));
         }
 
         HttpGet get = new HttpGet(getURLOrBlow(destinationURL, pathWithQueryParams).toExternalForm());
@@ -73,16 +72,6 @@ public class DiffyReplayerRequestBuilder {
         original.getHeaders()
                 .forEach((header, list) ->
                         list.forEach(value -> destination.addHeader(header, value)));
-    }
-
-    private String path(ContainerRequestContext original) {
-        Preconditions.checkNotNull(original);
-        return original.getUriInfo().getRequestUri().getRawPath();
-    }
-
-    private String query(ContainerRequestContext original) {
-        Preconditions.checkNotNull(original);
-        return original.getUriInfo().getRequestUri().getQuery();
     }
 
     private URL getURLOrBlow(String url) {
