@@ -21,14 +21,14 @@ public class DiffyReplayerRequestBuilderTest {
 
     private ContainerRequestContext requestContext;
     private MultivaluedHashMap<String, String> headers;
+    private UriInfo uriInfo;
 
     @Before
     public void setUp() throws NoSuchMethodException, URISyntaxException {
         requestContext = Mockito.mock(ContainerRequestContext.class);
         Mockito.when(requestContext.getMethod())
                 .thenReturn("GET");
-        URI uri = new URI("https://sdk-staging.split.io/api/qa/testDiffy");
-        UriInfo uriInfo = Mockito.mock(UriInfo.class);
+        uriInfo = Mockito.mock(UriInfo.class);
         headers = new MultivaluedHashMap<>();
         headers.putSingle("firstKey", "firstValue");
         headers.putSingle("secondKey", "secondValue");
@@ -37,14 +37,30 @@ public class DiffyReplayerRequestBuilderTest {
 
         Mockito.when(requestContext.getUriInfo())
                 .thenReturn(uriInfo);
-        Mockito.when(uriInfo.getRequestUri())
-                .thenReturn(uri);
-
-
     }
 
     @Test
-    public void headersAreCopiedAndRequestIsPointedToServer() {
+    public void headersAreCopiedAndRequestIsPointedToServerWithQueryParams() throws URISyntaxException {
+        URI uri = new URI("https://sdk-staging.split.io/api/qa/testDiffy?from=1234&to=456");
+        Mockito.when(uriInfo.getRequestUri())
+                .thenReturn(uri);
+
+        DiffyReplayerRequestBuilder test = new DiffyReplayerRequestBuilder("https://diffy-server.io");
+        HttpRequestBase requestBase = test.build(requestContext);
+        Assert.assertEquals("https://diffy-server.io/api/qa/testDiffy?from=1234&to=456", requestBase.getURI().toString());
+        Assert.assertEquals(4, requestBase.getAllHeaders().length);
+        Assert.assertEquals("qa/testDiffy", requestBase.getFirstHeader("Canonical-Resource").getValue());
+        Assert.assertEquals("true", requestBase.getFirstHeader("replayer").getValue());
+        Assert.assertEquals("firstValue", requestBase.getFirstHeader("firstKey").getValue());
+        Assert.assertEquals("secondValue", requestBase.getFirstHeader("secondKey").getValue());
+    }
+
+    @Test
+    public void headersAreCopiedAndRequestIsPointedToServerWithOutQueryParams() throws URISyntaxException {
+        URI uri = new URI("https://sdk-staging.split.io/api/qa/testDiffy");
+        Mockito.when(uriInfo.getRequestUri())
+                .thenReturn(uri);
+
         DiffyReplayerRequestBuilder test = new DiffyReplayerRequestBuilder("https://diffy-server.io");
         HttpRequestBase requestBase = test.build(requestContext);
         Assert.assertEquals("https://diffy-server.io/api/qa/testDiffy", requestBase.getURI().toString());
@@ -56,7 +72,10 @@ public class DiffyReplayerRequestBuilderTest {
     }
 
     @Test
-    public void doesNotAllowPost() {
+    public void doesNotAllowPost() throws URISyntaxException {
+        URI uri = new URI("https://sdk-staging.split.io/api/qa/testDiffy");
+        Mockito.when(uriInfo.getRequestUri())
+                .thenReturn(uri);
         Mockito.when(requestContext.getMethod())
                 .thenReturn("POST");
         DiffyReplayerRequestBuilder test = new DiffyReplayerRequestBuilder("https://diffy-server.io");
@@ -66,7 +85,10 @@ public class DiffyReplayerRequestBuilderTest {
     }
 
     @Test
-    public void doesNotAllowDelete() {
+    public void doesNotAllowDelete() throws URISyntaxException {
+        URI uri = new URI("https://sdk-staging.split.io/api/qa/testDiffy");
+        Mockito.when(uriInfo.getRequestUri())
+                .thenReturn(uri);
         Mockito.when(requestContext.getMethod())
                 .thenReturn("DELETE");
         DiffyReplayerRequestBuilder test = new DiffyReplayerRequestBuilder("https://diffy-server.io");
@@ -76,7 +98,10 @@ public class DiffyReplayerRequestBuilderTest {
     }
 
     @Test
-    public void doesNotAllowPut() {
+    public void doesNotAllowPut() throws URISyntaxException {
+        URI uri = new URI("https://sdk-staging.split.io/api/qa/testDiffy");
+        Mockito.when(uriInfo.getRequestUri())
+                .thenReturn(uri);
         Mockito.when(requestContext.getMethod())
                 .thenReturn("PUT");
         DiffyReplayerRequestBuilder test = new DiffyReplayerRequestBuilder("https://diffy-server.io");

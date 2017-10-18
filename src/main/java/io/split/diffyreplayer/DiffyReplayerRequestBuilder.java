@@ -43,12 +43,14 @@ public class DiffyReplayerRequestBuilder {
         Preconditions.checkNotNull(original);
 
         String path = path(original);
+        String query = query(original);
+        String pathWithQueryParams = Strings.isNullOrEmpty(query) ? path : path + "?" + query;
         if (!"GET".equals(original.getMethod())) {
             throw new IllegalArgumentException(String.format("Only GETS are allowed, method %s is is %s",
                     path, original.getMethod()));
         }
 
-        HttpGet get = new HttpGet(getURLOrBlow(destinationURL, path).toExternalForm());
+        HttpGet get = new HttpGet(getURLOrBlow(destinationURL, pathWithQueryParams).toExternalForm());
         addHeaders(original, get);
         return get;
     }
@@ -78,6 +80,11 @@ public class DiffyReplayerRequestBuilder {
         return original.getUriInfo().getRequestUri().getRawPath();
     }
 
+    private String query(ContainerRequestContext original) {
+        Preconditions.checkNotNull(original);
+        return original.getUriInfo().getRequestUri().getQuery();
+    }
+
     private URL getURLOrBlow(String url) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(url));
 
@@ -88,14 +95,15 @@ public class DiffyReplayerRequestBuilder {
         }
     }
 
-    private URL getURLOrBlow(URL base, String path) {
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(path));
+    private URL getURLOrBlow(URL base, String pathWithQueryParams) {
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(pathWithQueryParams));
         Preconditions.checkNotNull(base);
 
         try {
-            return new URL(base, path);
+
+            return new URL(base, pathWithQueryParams);
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException(String.format("URL %s is not valid", path), e);
+            throw new IllegalArgumentException(String.format("URL %s is not valid", pathWithQueryParams), e);
         }
     }
 }

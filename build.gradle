@@ -7,7 +7,7 @@ apply plugin: 'signing'
 
 group = "io.split"
 archivesBaseName = "diffyreplayer"
-version = "0.7"
+version = "0.8"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
