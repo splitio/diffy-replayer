@@ -11,7 +11,7 @@ public class DiffyReplayerPropertiesTest {
 
     @Test
     public void testCanParsePatternFile() throws IOException {
-        Map<Pattern, String> patterns = DiffyReplayerProperties.INSTANCE.getPatterns();
+        Map<Pattern, String> patterns = DiffyReplayerProperties.getInstance().getPatterns();
         Assert.assertEquals(3, patterns.size());
     }
 }

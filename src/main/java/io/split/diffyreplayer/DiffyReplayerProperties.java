@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  */
 public class DiffyReplayerProperties {
 
-    public static final DiffyReplayerProperties INSTANCE = new DiffyReplayerProperties();
+    private static DiffyReplayerProperties INSTANCE = null;
 
     private final Logger LOG = LoggerFactory.getLogger(DiffyReplayerProperties.class);
 
@@ -51,12 +51,32 @@ public class DiffyReplayerProperties {
     private String environment;
     private final Map<Pattern, String> patterns = Maps.newLinkedHashMap();
 
+    public static DiffyReplayerProperties getInstance(String environment){
+        if(INSTANCE == null) {
+            INSTANCE  = new DiffyReplayerProperties(environment);
+        }
+
+        return INSTANCE;
+    }
+
+    public static DiffyReplayerProperties getInstance(){
+        if(INSTANCE == null) {
+            INSTANCE  = new DiffyReplayerProperties();
+        }
+
+        return INSTANCE;
+    }
+
+    private DiffyReplayerProperties() {
+        this(Optional.ofNullable(System.getenv(ENVIRONMENT)).orElse(LOCAL_ENVIRONMENT));
+    }
+
     /**
      * Default Constructor that loads the properties file.
      */
-    private DiffyReplayerProperties() {
+    private DiffyReplayerProperties(String env) {
         try {
-            environment = Optional.ofNullable(System.getenv(ENVIRONMENT)).orElse(LOCAL_ENVIRONMENT);
+            environment = env;
             String envFile = String.format(DIFFY_FILE, environment);
             LOG.info("diffyreplayer.properties file to be load: " + envFile);
             InputStream diffyProperties = ClassLoader.class.getResourceAsStream(envFile);

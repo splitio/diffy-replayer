@@ -9,6 +9,6 @@ import io.split.diffyreplayer.DiffyReplayerProperties;
 public class MediumRateCondition extends PercentageCondition {
 
     public MediumRateCondition() {
-        super(DiffyReplayerProperties.INSTANCE.getMediumRate());
+        super(DiffyReplayerProperties.getInstance().getMediumRate());
     }
 }

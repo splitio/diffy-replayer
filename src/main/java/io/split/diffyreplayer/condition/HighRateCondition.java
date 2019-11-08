@@ -10,6 +10,6 @@ import io.split.diffyreplayer.DiffyReplayerProperties;
 public class HighRateCondition extends PercentageCondition {
 
     public HighRateCondition() {
-        super(DiffyReplayerProperties.INSTANCE.getMediumRate());
+        super(DiffyReplayerProperties.getInstance().getMediumRate());
     }
 }

@@ -28,7 +28,7 @@ public class DiffyReplayerRequestBuilder {
      */
     public DiffyReplayerRequestBuilder(String destinationURL) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(destinationURL));
-        this.idParser = new DiffyIdParser(DiffyReplayerProperties.INSTANCE.getPatterns());
+        this.idParser = new DiffyIdParser(DiffyReplayerProperties.getInstance().getPatterns());
         this.destinationURL = getURLOrBlow(destinationURL);
     }
 

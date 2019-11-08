@@ -26,19 +26,39 @@ public class DiffyReplayer implements AutoCloseable {
     // it's not worth doing some other type of lazy initialization singleton.
     // Since this will be open sourced, cannot use Guice Singleton
     // Cannot use enum Singleton since I cannot mock an enum for unit tests.
-    public static final DiffyReplayer INSTANCE = new DiffyReplayer();
+    private static DiffyReplayer INSTANCE = new DiffyReplayer();
 
     private static final Logger LOG = LoggerFactory.getLogger(DiffyReplayer.class);
 
     private final ExecutorService executor;
     private final String diffyUrl;
 
+    public static DiffyReplayer getInstance(){
+        if(INSTANCE == null){
+            INSTANCE= new DiffyReplayer();
+        }
+
+        return INSTANCE;
+    }
+
+    public static DiffyReplayer getInstance(String environment){
+        if(INSTANCE == null){
+            INSTANCE= new DiffyReplayer(DiffyReplayerProperties.getInstance(environment));
+        }
+
+        return INSTANCE;
+    }
+
     /**
      * Should never be called. Use the Singleton INSTANCE.
      */
     private DiffyReplayer() {
-        this.executor = Executors.newFixedThreadPool(DiffyReplayerProperties.INSTANCE.getDiffyThreadPool());
-        this.diffyUrl = DiffyReplayerProperties.INSTANCE.getDiffyUrl();
+        this(DiffyReplayerProperties.getInstance());
+    }
+
+    public DiffyReplayer(DiffyReplayerProperties diffyReplayerProperties) {
+        this.executor = Executors.newFixedThreadPool(diffyReplayerProperties.getDiffyThreadPool());
+        this.diffyUrl = diffyReplayerProperties.getDiffyUrl();
         ((ThreadPoolExecutor) executor).setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
     }
 
