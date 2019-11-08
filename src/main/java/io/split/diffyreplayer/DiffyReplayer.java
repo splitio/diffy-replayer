@@ -26,7 +26,7 @@ public class DiffyReplayer implements AutoCloseable {
     // it's not worth doing some other type of lazy initialization singleton.
     // Since this will be open sourced, cannot use Guice Singleton
     // Cannot use enum Singleton since I cannot mock an enum for unit tests.
-    private static DiffyReplayer INSTANCE = new DiffyReplayer();
+    private static DiffyReplayer INSTANCE = null;
 
     private static final Logger LOG = LoggerFactory.getLogger(DiffyReplayer.class);
 
