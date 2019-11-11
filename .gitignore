@@ -33,3 +33,8 @@ sonar-project.properties
 .DS_Store
 .gradle/
 build/
+
+gradle/
+gradlew
+gradlew.bat
+out/

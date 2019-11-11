@@ -8,8 +8,8 @@ import io.split.diffyreplayer.DiffyReplayerProperties;
 public class ProdMediumCondition extends PercentageCondition {
 
     public ProdMediumCondition() {
-        super("prod".equals(DiffyReplayerProperties.INSTANCE.getEnvironment()) ?
-                DiffyReplayerProperties.INSTANCE.getMediumRate() :
-                DiffyReplayerProperties.INSTANCE.getLowRate());
+        super("prod".equals(DiffyReplayerProperties.getInstance().getEnvironment()) ?
+                DiffyReplayerProperties.getInstance().getMediumRate() :
+                DiffyReplayerProperties.getInstance().getLowRate());
     }
 }

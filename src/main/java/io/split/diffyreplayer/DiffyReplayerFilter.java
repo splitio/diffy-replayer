@@ -41,7 +41,15 @@ public class DiffyReplayerFilter implements ContainerRequestFilter {
      * Default Constructor.
      */
     public DiffyReplayerFilter() {
-        this.diffyReplayer = DiffyReplayer.INSTANCE;
+        this.diffyReplayer = DiffyReplayer.getInstance();
+    }
+
+    /**
+     * Constructor to force environment by parameter instead of env var.
+     * @param environment
+     */
+    public DiffyReplayerFilter(String environment) {
+        this.diffyReplayer = DiffyReplayer.getInstance(environment);
     }
 
     /**
