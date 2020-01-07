@@ -37,7 +37,6 @@ public class DiffyReplayerFilterTest {
     @Test
     public void checkRequestWithDiffyHeaderDoesNotGetReplayed() throws IOException {
         headers.putSingle(DiffyReplay.HEADER, "");
-
         diffyReplayerFilter
                 .filter(requestContext);
         Mockito.verify(diffyReplayer, Mockito.never()).replay(Mockito.anyObject(), Mockito.anyObject());

@@ -7,7 +7,7 @@ apply plugin: 'signing'
 
 group = "io.split"
 archivesBaseName = "diffyreplayer"
-version = "0.10"
+version = "0.11"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -64,10 +64,6 @@ publishing {
             }    
         }
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
 }
 
 repositories {

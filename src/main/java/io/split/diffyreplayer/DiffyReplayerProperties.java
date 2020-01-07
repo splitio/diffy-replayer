@@ -79,7 +79,7 @@ public class DiffyReplayerProperties {
             environment = env;
             String envFile = String.format(DIFFY_FILE, environment);
             LOG.info("diffyreplayer.properties file to be load: " + envFile);
-            InputStream diffyProperties = ClassLoader.class.getResourceAsStream(envFile);
+            InputStream diffyProperties = getClass().getResourceAsStream(envFile);
             if (diffyProperties != null) {
                 properties.load(diffyProperties);
                 LOG.info("Loaded Diffy Replayer properties: " + properties.entrySet());
@@ -155,7 +155,7 @@ public class DiffyReplayerProperties {
         }
         try {
             file = file.startsWith("/") ? file : "/" + file;
-            InputStream resource = ClassLoader.class.getResourceAsStream(file);
+            InputStream resource = getClass().getResourceAsStream(file);
             if (resource != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(resource));
                 String line;
